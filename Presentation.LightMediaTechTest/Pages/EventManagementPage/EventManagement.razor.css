@@ -1,0 +1,27 @@
+.event-manager {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.event-manager-details {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 5rem;
+    width: 50%;
+}
+
+.event-manager-attendees {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 0.2rem solid var(--color-secondary);
+    background-color: white;
+    width: 100%;
+}
+
+    .event-manager-attendees > p, h3 {
+        color: black;
+    }

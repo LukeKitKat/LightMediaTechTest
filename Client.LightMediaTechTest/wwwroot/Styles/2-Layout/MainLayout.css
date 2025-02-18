@@ -1,0 +1,9 @@
+﻿.main-layout {
+    height: calc(100% - var(--top-bar--height) - var(--border-standard--width));
+}
+
+.main-layout__container {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}

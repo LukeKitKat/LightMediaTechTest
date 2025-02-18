@@ -1,0 +1,36 @@
+﻿html {
+    /*Primary Color - Liquorice*/
+    --color-primary: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
+    --primary-h: 356;
+    --primary-s: 87%;
+    --primary-l: 5%;
+    /*Secondary Color - Falu Red*/
+    --color-secondary: hsl(var(--secondary-h), var(--secondary-s), var(--secondary-l));
+    --secondary-h: 358;
+    --secondary-s: 62%;
+    --secondary-l: 32%;
+    /*Tertiary Color - Raspberry Rose*/
+    --color-tertiary: hsl(var(--tertiary-h), var(--tertiary-s), var(--tertiary-l));
+    --color-tertiary-darken: hsl(var(--tertiary-h), var(--tertiary-s), calc(var(--tertiary-l) * var(--darken-mod)));
+    --tertiary-h: 344;
+    --tertiary-s: 46%;
+    --tertiary-l: 49%;
+    /*Quaternary Color - Grey*/
+    --color-grey: hsl(var(--grey-h), var(--grey-s), var(--grey-l));
+    --color-grey-darken: hsl(var(--grey-h), var(--grey-s), calc(var(--grey-l) * var(--darken-mod)));
+    --grey-h: 195;
+    --grey-s: 4%;
+    --grey-l: 49%;
+    /*White Color*/
+    --color-white: hsl(var(--white-h), var(--white-s), var(--white-l));
+    --white-h: 360;
+    --white-s: 100%;
+    --white-l: 100%;
+    /*Black Color*/
+    --color-black: hsl(var(--black-h), var(--black-s), var(--black-l));
+    --black-h: 195;
+    --black-s: 4%;
+    --black-l: 2%;
+    /*Darken Modifier*/
+    --darken-mod: 0.5;
+}

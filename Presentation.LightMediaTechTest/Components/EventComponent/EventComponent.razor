@@ -1,0 +1,31 @@
+﻿@using Presentation.LightMediaTechTest.Components.Button
+
+<div class="event">
+    <div class="event-container">
+        <img class="event-image" src="@Event.EventPicture" alt="@($"{Event.EventName} Image")" />
+
+        <div class="event-details">
+            <p>@($"Event name: {Event.EventName}")</p>
+            <p>@($"Event summary: {Event.EventShortDescription}")</p>
+            <p>@($"Event type: {Event.EventCatagory?.CatagoryName}")</p>
+            <p>@($"Event location: {Event.EventLocation}")</p>
+            <p>@($"Event date: {Event.EventDateTime}")</p>
+
+            @if (CanBookNow)
+            {
+                <Button Label="@(HideBooking ? "Login to Book" : "Book Now!")" OnClick="() => BookingClicked(Event.Id)" Disabled="HideBooking" />
+            }
+
+            @*For Admins to manage events*@
+            @if (CanManage)
+            {
+                <Button Label="Manage Event" OnClick="@(() => NavigationManager.NavigateTo($"eventmanager/{Event.Id}"))" />
+            }
+        </div>
+    </div>
+
+    @if (DisplayCreatedDate)
+    {
+        <p class="event-created-date">@($"Created on: {Event.PublishedDateTime}")</p>
+    }
+</div>

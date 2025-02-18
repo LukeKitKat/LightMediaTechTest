@@ -1,0 +1,18 @@
+.event-page {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.event-description {
+}
+
+.event-confirm-attendance {
+    display: flex;
+    flex-direction: column;
+}
+
+    .event-confirm-attendance > h3 {
+        font-style: oblique;
+    }

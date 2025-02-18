@@ -1,0 +1,23 @@
+﻿/*#region IMPORT ALL CSS FILES TO THIS*/
+
+/*===RESOURCES===*/
+@import url(Styles/5-Resources/FontAwesome-V6.7.2Free/css/all.css);
+
+/*===OVERRIDES===*/
+
+
+/*===COMPONENTS===*/
+@import url(Styles/3-Components/Button.css);
+@import url(Styles/3-Components/IconButton.css);
+@import url(Styles/3-Components/EventComponent.css);
+
+/*===LAYOUT===*/
+@import url(Styles/2-Layout/Scrollbar.css);
+@import url(Styles/2-Layout/MainLayout.css);
+
+/*===BASE===*/
+@import url(Styles/1-Base/GlobalVariables.css);
+@import url(Styles/1-Base/Colors.css);
+@import url(Styles/1-Base/Base.css);
+
+/*#endregion*/

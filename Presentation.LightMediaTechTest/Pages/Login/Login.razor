@@ -1,0 +1,69 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using Presentation.LightMediaTechTest.Components.Button
+@page "/Login"
+
+<div class="login">
+
+    <div class="login__container">
+
+        <p>Login</p>
+
+        @if (!Registering)
+        {
+            <EditForm class="login__details" EditContext="@EditContext" OnValidSubmit="LoginToExistingAccount">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <p>Username</p>
+                <InputText @bind-Value="@LoginModel.LoginUserName" />
+                <ValidationMessage For="() => LoginModel.LoginUserName" />
+
+                <p>Password</p>
+                <InputText @bind-Value="@LoginModel.LoginPassword" />
+                <ValidationMessage For="() => LoginModel.LoginPassword" />
+
+                <Button ButtonType="ButtonTypes.Submit" Label="Login" />
+            </EditForm>
+        }
+        else
+        {
+            <EditForm class="login__details" EditContext="@EditContext" OnValidSubmit="RegisterNewUserAsync">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <p>Email</p>
+                <InputText DisplayName="Email" @bind-Value="@RegisteringUser.Email" />
+                <ValidationMessage For="() => RegisteringUser.Email" />
+
+                <p>Date of Birth</p>
+                <InputDate DisplayName="Date of Birth" @bind-Value="@RegisteringUser.DoB" />
+                <ValidationMessage For="() => RegisteringUser.DoB" />
+
+                <p>Account Name</p>
+                <InputText DisplayName="Username" @bind-Value="@RegisteringUser.AccountName" />
+                <ValidationMessage For="() => RegisteringUser.AccountName" />
+
+                <p>Account Type</p>
+                <InputSelect @bind-Value="RegisterUserOption">
+                    @foreach (var role in RegisteringRoles)
+                    {
+                        <option>@role.RoleName</option>
+                    }
+                </InputSelect>
+
+                <p>Password</p>
+                <InputText DisplayName="Password" @bind-Value="@RegisteringPassword" />
+                <ValidationMessage For="() => RegisteringPassword" />
+
+                <p>Confirm Password</p>
+                <InputText DisplayName="Confirm Password" @bind-Value="@RegisteringConfirmPassword" />
+                <ValidationMessage For="() => RegisteringConfirmPassword" />
+
+                <Button ButtonType="ButtonTypes.Submit" Label="Register" />
+            </EditForm>
+        }
+
+        <Button Label="@(Registering ? "Back to Login" : "Register")" OnClick="ToggleRegisterState" />
+    </div>
+
+</div>

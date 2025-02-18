@@ -1,0 +1,41 @@
+﻿@page "/event/{EventId:int}"
+@using Microsoft.AspNetCore.Components.Forms
+@using Presentation.LightMediaTechTest.Components.Button
+@using Presentation.LightMediaTechTest.Components.EventComponent
+
+<div class="event-page">
+    <EventComponent Event="Event" CanBookNow="false" DisplayCreatedDate="false" />
+
+    <div class="event-description">
+        <p>@Event.EventFullDescription</p>
+    </div>
+
+    <div class="spacer" />
+
+    <div class="event-confirm-attendance">
+        @if (AlreadyApplied)
+        {
+            if (RecentlyApplied)
+            {
+                <h3>Thank You for Attending!</h3>
+            }
+
+            <Button Label="Withdraw Attendance" OnClick="() => AttendEventClicked(false)" />
+        }
+        else
+        {
+
+            <h3>Confirm Contact Details to Complete Booking</h3>
+            <br />
+
+            <p>Display Name</p>
+            <InputText @bind-Value="@CurrentUser.DisplayName" />
+
+            <p>Email</p>
+            <InputText DisplayName="Email" @bind-Value="@CurrentUser.Email" />
+
+            <Button Label="Confirm Attendance" OnClick="() => AttendEventClicked(true)" />
+
+        }
+    </div>
+</div>

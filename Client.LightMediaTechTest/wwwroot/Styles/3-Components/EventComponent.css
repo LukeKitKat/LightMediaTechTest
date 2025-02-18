@@ -1,0 +1,29 @@
+﻿.event {
+    display: flex;
+    flex-direction: column;
+    padding-block: 2.5rem;
+}
+
+.event-container {
+    display: flex;
+}
+
+.event-image {
+    width: 20rem;
+    height: 20rem;
+}
+
+.event-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 2rem;
+}
+
+    .event-details > p {
+        font-size: 1.4rem;
+    }
+
+.event-created-date {
+    font-size: 1rem;
+}

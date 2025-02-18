@@ -1,0 +1,15 @@
+﻿.button {
+    height: 2rem;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background-color: var(--color-grey);
+}
+
+    .button:hover {
+        background-color: var(--color-grey-darken);
+    }
+
+.button__label {
+    margin: 0;
+}

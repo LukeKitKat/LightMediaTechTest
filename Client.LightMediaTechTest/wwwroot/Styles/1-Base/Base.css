@@ -1,0 +1,25 @@
+﻿html {
+    font-size: 62.5%;
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    height: inherit;
+    background-color: var(--color-primary);
+}
+
+p {
+    font-size: 1.2rem;
+}
+
+p, h1, h2, h3, h3, h4, h5, h6, i {
+    color: var(--color-white)
+}
+
+.spacer {
+    border: 0.2rem solid var(--color-secondary);
+    width: 90%;
+    height: 0.5rem;
+    margin-block: 5rem;
+}

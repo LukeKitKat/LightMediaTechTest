@@ -1,0 +1,60 @@
+@page "/eventmanager/{EventId:int}"
+@using Microsoft.AspNetCore.Components.Forms
+@using Presentation.LightMediaTechTest.Components.Button
+
+<div class="event-manager">
+    <div class="event-manager-details">
+        <EditForm EditContext="@EditContext" OnValidSubmit="OnEventDetailsSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <p>Event Name</p>
+            <InputText @bind-Value="@Event.EventName" />
+            <ValidationMessage For="() => Event.EventName" />
+
+            <p>Event Tagline</p>
+            <InputText @bind-Value="@Event.EventShortDescription" />
+            <ValidationMessage For="() => Event.EventShortDescription" />
+
+            <p>Event Description</p>
+            <InputTextArea @bind-Value="@Event.EventFullDescription" />
+            <ValidationMessage For="() => Event.EventFullDescription" />
+
+            <p>Event Catagory</p>
+            <InputSelect @bind-Value="EventCatagoryOption">
+                @foreach (var catagory in EventCatagories)
+                {
+                    <option>@catagory.CatagoryName</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="() => Event.EventCatagory" />
+
+            <p>Event Location</p>
+            <InputText @bind-Value="@Event.EventLocation" />
+            <ValidationMessage For="() => Event.EventLocation" />
+
+            <p>Event Date</p>
+            <InputDate @bind-Value="@Event.EventDateTime" />
+            <ValidationMessage For="() => Event.EventDateTime" />
+
+            <p>Event Picture</p>
+            <InputText @bind-Value="@Event.EventPicture" />
+            <ValidationMessage For="() => Event.EventPicture" />
+
+            <Button ButtonType="ButtonTypes.Submit" Label="Confirm Changes" />
+        </EditForm>
+
+        <div class="event-manager-attendees">
+            <h3>Event Attendees</h3>
+            <br />
+
+            @foreach (var attendee in Event.EventUsers)
+            {
+                <p>@($"User: {attendee.User?.DisplayName} - Email: {attendee.User?.Email}")</p>
+            }
+        </div>
+
+    </div>
+
+    <Button Label="DELETE EVENT" OnClick="DeleteEventClicked" />
+</div>

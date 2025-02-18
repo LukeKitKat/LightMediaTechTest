@@ -1,0 +1,48 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using Presentation.LightMediaTechTest.Components.Button
+@using Presentation.LightMediaTechTest.Components.EventComponent
+@using Presentation.LightMediaTechTest.Components.IconButton
+
+<div class="home">
+    <div class="home-container">
+        <div class="home-top-bar">
+            <div class="home-filter">
+                <p>Filter by name:</p>
+                <InputText @bind-Value="NameFilter" />
+
+                <p>Filter by catagory:</p>
+                <InputSelect @bind-Value="CatagoryFilter">
+                    @foreach(var catagory in Catagories)
+                    {
+                        <option>@catagory</option>
+                    }
+                </InputSelect>
+
+                <Button Label="Apply Filter" OnClick="Filter" />
+            </div>
+
+            <div class="home-login">
+                @if (CurrentUser is null)
+                {
+                    <Button Label="Login" OnClick="@(() => NavigationManager.NavigateTo("/login"))" />
+                }
+                else
+                {
+                    <p>Logged in as: @CurrentUser.DisplayName</p>
+                    
+                    if (CurrentUser.UserRoles!.CanAmendEvents)
+                    {
+                        <Button Label="Create New Event" OnClick="@(() => NavigationManager.NavigateTo("/eventmanager/0"))" />
+                    }
+                }
+            </div>
+        </div>
+        
+
+        @foreach (var charityEvent in Events)
+        {
+            <EventComponent Event="charityEvent" />
+        }
+
+    </div>
+</div>
