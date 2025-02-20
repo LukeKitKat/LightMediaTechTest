@@ -1,15 +1,16 @@
 ﻿.button {
+    --button-background-color: var(--color-grey);
     height: 2rem;
     padding: 0;
     margin: 0;
     border: none;
-    background-color: var(--color-grey);
+    background-color: var(--button-background-color);
 }
 
-    .button:hover {
-        background-color: var(--color-grey-darken);
+    .button:hover:not(:disabled) {
+        --button-background-color: var(--color-grey-darken);
     }
 
-.button__label {
+.button-label {
     margin: 0;
 }

@@ -20,11 +20,18 @@
 
             @if (DisplayBookRedirect)
             {
-                <Button Label="Book Now!" OnClick="() => BookingClicked(Event.Id)" />
+                if (CurrentUser is not null)
+                {
+                    <Button Label="Book Now!" OnClick="() => BookingClicked(Event.Id)" />
+                }
+                else
+                {
+                    <Button Label="Login to Book" Disabled />
+                }
             }
 
             @*For Admins to manage events*@
-            @if (CurrentUser?.UserRoles?.CanAmendEvents ?? false)
+            @if ((CurrentUser?.UserRoles?.CanAmendEvents ?? false) || (CurrentUser?.UserRoles?.CanManageUsers ?? false))
             {
                 <Button Label="Manage Event" OnClick="@(() => NavigationManager.NavigateTo($"eventmanager/{Event.Id}"))" />
             }

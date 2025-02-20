@@ -24,6 +24,10 @@ namespace Presentation.LightMediaTechTest.Components.EventComponent
         [Inject]
         private NavigationManager NavigationManager { get; set; } = default!;
 
+        /// <summary>
+        /// Navigates to a specific event.
+        /// </summary>
+        /// <param name="eventId">The ID of the event.</param>
         private void BookingClicked(int eventId) =>
             NavigationManager.NavigateTo($"/event/{eventId}");
     }

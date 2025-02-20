@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Presentation.LightMediaTechTest.Components.PresentationBase;
 using Presentation.LightMediaTechTest.Pages.Login.Models;
@@ -51,10 +52,8 @@ namespace Presentation.LightMediaTechTest.Pages.EventManagementPage
             EventCatagories = catagoriesResp.Result!;
 
             var resp = await EventManager.FetchEventByIdAsync(EventId);
-            if (!resp.Success)
-                return;
-
-            Event = resp.Result!;
+            if (resp.Success)
+                Event = resp.Result ?? new();
 
             if (Event.Id == 0)
             {
@@ -84,6 +83,19 @@ namespace Presentation.LightMediaTechTest.Pages.EventManagementPage
             var resp = await EventManager.DeleteExistingEventAsync(EventId);
             if (resp.Success)
                 NavigationManager.NavigateTo("/", false, true);
+        }
+
+        private async Task ExportAttendeesToCSVAsync()
+        {
+            var fileName = $"EventAttendees-{DateTime.Now.ToShortDateString().Replace("/", "")}.csv";
+            var fileContent = new StringBuilder("Attendee,Email\n");
+
+            foreach (var attendee in Event.EventUsers)
+            {
+                fileContent.AppendLine($"{attendee.User?.DisplayName},{attendee.User?.Email}\n");
+            }
+
+            await CreateAndDownloadFileAsync(fileName, fileContent.ToString());
         }
     }
 }

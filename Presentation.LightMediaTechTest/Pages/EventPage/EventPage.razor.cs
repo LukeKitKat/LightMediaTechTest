@@ -27,10 +27,8 @@ namespace Presentation.LightMediaTechTest.Pages.EventPage
         private bool AlreadyApplied { get; set; }
         private bool RecentlyApplied { get; set; }
 
-        public EventPage()
-        {
-            OnAfterRenderAsyncHandler = CheckForExistingApplicationAsync();
-        }
+        public EventPage() =>
+            OnAfterRenderAsyncOverloadEvent += (sender, args) => { return CheckForExistingApplicationAsync(); };
 
         protected override async Task OnInitializedAsync()
         {

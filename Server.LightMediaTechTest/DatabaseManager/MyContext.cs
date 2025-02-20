@@ -18,6 +18,9 @@ namespace Server.LightMediaTechTest.DatabaseManager
         public DbSet<EventCatagory> EventCatagories { get; set; }
         public DbSet<EventUser> EventAttendees { get; set; }
 
+        /// <summary>
+        /// Because our database is code-first, any default and/or non-mutable data crucial for the function of the system will be generated here.
+        /// </summary>
         public MyContext()
         {
             if (Database.EnsureCreated())
@@ -44,6 +47,10 @@ namespace Server.LightMediaTechTest.DatabaseManager
             }
         }
 
+        /// <summary>
+        /// Basic OnConfiguring declaration to allocate the connection string of the database and configure it.
+        /// </summary>
+        /// <param name="optionsBuilder">The optionsBuilder.</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=localhost;Database=LightMediaDevelopment;Trusted_Connection=true;TrustServerCertificate=true;Encrypt=false;ConnectRetryCount=0");

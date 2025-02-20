@@ -6,57 +6,70 @@
 
 <div class="event-manager">
     <div class="event-manager-details">
-        <EditForm EditContext="@EditContext" OnValidSubmit="OnEventDetailsSubmit">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
+        @if (CurrentUser?.UserRoles?.CanAmendEvents ?? false)
+        {
+            <EditForm EditContext="@EditContext" OnValidSubmit="OnEventDetailsSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
 
-            <p>Event Name</p>
-            <InputText @bind-Value="@Event.EventName" />
-            <ValidationMessage For="() => Event.EventName" />
+                <p>Event Name</p>
+                <InputText @bind-Value="@Event.EventName" />
+                <ValidationMessage For="() => Event.EventName" />
 
-            <p>Event Tagline</p>
-            <InputText @bind-Value="@Event.EventShortDescription" />
-            <ValidationMessage For="() => Event.EventShortDescription" />
+                <p>Event Tagline</p>
+                <InputText @bind-Value="@Event.EventShortDescription" />
+                <ValidationMessage For="() => Event.EventShortDescription" />
 
-            <p>Event Description</p>
-            <InputTextArea @bind-Value="@Event.EventFullDescription" />
-            <ValidationMessage For="() => Event.EventFullDescription" />
+                <p>Event Description</p>
+                <InputTextArea @bind-Value="@Event.EventFullDescription" />
+                <ValidationMessage For="() => Event.EventFullDescription" />
 
-            <p>Event Catagory</p>
-            <InputSelect @bind-Value="EventCatagoryOption">
-                @foreach (var catagory in EventCatagories)
+                <p>Event Catagory</p>
+                <InputSelect @bind-Value="EventCatagoryOption">
+                    @foreach (var catagory in EventCatagories)
+                    {
+                        <option>@catagory.CatagoryName</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="() => Event.EventCatagory" />
+
+                <p>Event Location</p>
+                <InputText @bind-Value="@Event.EventLocation" />
+                <ValidationMessage For="() => Event.EventLocation" />
+
+                <p>Event Date</p>
+                <InputDate @bind-Value="@Event.EventDateTime" />
+                <ValidationMessage For="() => Event.EventDateTime" />
+
+                <p>Event Picture</p>
+                <InputText @bind-Value="@Event.EventPicture" />
+                <ValidationMessage For="() => Event.EventPicture" />
+
+                <Button ButtonType="ButtonTypes.Submit" Label="Confirm Changes" />
+
+                @if ((Event?.Id ?? 0) is not 0)
                 {
-                    <option>@catagory.CatagoryName</option>
+                    <Button Label="DELETE EVENT" OnClick="DeleteEventClicked" />
                 }
-            </InputSelect>
-            <ValidationMessage For="() => Event.EventCatagory" />
+            </EditForm>
+        }
 
-            <p>Event Location</p>
-            <InputText @bind-Value="@Event.EventLocation" />
-            <ValidationMessage For="() => Event.EventLocation" />
+        @if (CurrentUser?.UserRoles?.CanManageUsers ?? false)
+        {
+            <div class="event-manager-attendees">
+                <h3>Event Attendees</h3>
+                <br />
 
-            <p>Event Date</p>
-            <InputDate @bind-Value="@Event.EventDateTime" />
-            <ValidationMessage For="() => Event.EventDateTime" />
+                @foreach (var attendee in Event.EventUsers)
+                {
+                    <p>@($"Attendee: {attendee.User?.DisplayName} - Email: {attendee.User?.Email}")</p>
+                }
 
-            <p>Event Picture</p>
-            <InputText @bind-Value="@Event.EventPicture" />
-            <ValidationMessage For="() => Event.EventPicture" />
-
-            <Button ButtonType="ButtonTypes.Submit" Label="Confirm Changes" />
-        </EditForm>
-
-        <div class="event-manager-attendees">
-            <h3>Event Attendees</h3>
-            <br />
-
-            @foreach (var attendee in Event.EventUsers)
-            {
-                <p>@($"User: {attendee.User?.DisplayName} - Email: {attendee.User?.Email}")</p>
-            }
-        </div>
-
+                @if (CurrentUser?.UserRoles?.CanExportDetails ?? false)
+                {
+                    <Button Label="Export Attendees to CSV" OnClick="ExportAttendeesToCSVAsync" />
+                }
+            </div>
+        }
     </div>
-
-    <Button Label="DELETE EVENT" OnClick="DeleteEventClicked" />
 </div>

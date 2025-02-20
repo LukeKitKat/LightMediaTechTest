@@ -82,7 +82,7 @@ namespace Presentation.LightMediaTechTest.Pages.Login
                     return;
 
                 await StoreCookieAsync(LoginConstants.UserCookieId, $"{userFetchResp.Result!.Id}");
-                NavigationManager.NavigateTo("/");
+                NavigationManager.NavigateTo("/", false, true);
             }
         }
 

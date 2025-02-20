@@ -12,6 +12,10 @@ namespace Server.LightMediaTechTest.EventManager
 {
     public class EventManager : ServiceBase
     {
+        /// <summary>
+        /// A basic task just to generate three example events for the sake of this Test.
+        /// </summary>
+        /// <returns>The service response indicating conditions of the service after completion, as well as containing the result.</returns>
         public async Task<ServiceResponse> GenerateTemplateEventsAsync()
         {
             return await ExecAsync(async (db, resp) =>
@@ -65,6 +69,10 @@ namespace Server.LightMediaTechTest.EventManager
             });
         }
 
+        /// <summary>
+        /// Fetches every event in the database and returns them within the service response.
+        /// </summary>
+        /// <returns>The service response indicating conditions of the service after completion, as well as containing the result.</returns>
         public async Task<ServiceResponse<List<Event>>> FetchAllEventsAsync()
         {
             return await ExecAsync<List<Event>>(async (db, resp) =>
@@ -76,6 +84,10 @@ namespace Server.LightMediaTechTest.EventManager
             });
         }
 
+        /// <summary>
+        /// Fetches every event catagory and returns them within the service response.
+        /// </summary>
+        /// <returns>The service response indicating conditions of the service after completion, as well as containing the result.</returns>
         public async Task<ServiceResponse<List<EventCatagory>>> FetchAllEventCatagoriesAsync()
         {
             return await ExecAsync<List<EventCatagory>>(async (db, resp) =>
@@ -85,6 +97,10 @@ namespace Server.LightMediaTechTest.EventManager
             });
         }
 
+        /// <summary>
+        /// Fetches a specific event by it's ID and returns it within the service response.
+        /// </summary>
+        /// <returns>The service response indicating conditions of the service after completion, as well as containing the result.</returns>
         public async Task<ServiceResponse<Event?>> FetchEventByIdAsync(int eventId)
         {
             return await ExecAsync<Event?>(async (db, resp) =>
@@ -98,21 +114,35 @@ namespace Server.LightMediaTechTest.EventManager
             });
         }
 
+        /// <summary>
+        /// Adds or updates an event using the data in a given model.
+        /// </summary>
+        /// <param name="event">The event model containing the new or updated data.</param>
+        /// <param name="updating">a condition stating whether the data is to be added as new or updated.</param>
+        /// <returns>The service response indicating conditions of the service after completion, as well as containing the result.</returns>
         public async Task<ServiceResponse> AddOrUpdateEventAsync(Event @event, bool updating)
         {
             return await ExecAsync(async (db, resp) =>
             {
-                @event.PublishedDateTime = DateTime.UtcNow;
-
                 if (updating)
+                {
                     db.Events.Update(@event);
+                }
                 else
+                {
+                    @event.PublishedDateTime = DateTime.UtcNow;
                     await db.Events.AddAsync(@event);
+                }
                 
                 await db.SaveChangesAsync();
             });
         }
 
+        /// <summary>
+        /// Deletes an existing event from the database using it's ID.
+        /// </summary>
+        /// <param name="eventId">The ID of the event to be deleted.</param>
+        /// <returns>The service response indicating conditions of the service after completion, as well as containing the result.</returns>
         public async Task<ServiceResponse> DeleteExistingEventAsync(int eventId)
         {
             return await ExecAsync(async (db, resp) =>
@@ -122,6 +152,13 @@ namespace Server.LightMediaTechTest.EventManager
             });
         }
 
+        /// <summary>
+        /// Updates the relational table that determines which users have signed up to which events.
+        /// </summary>
+        /// <param name="eventId">The ID of the event being attended.</param>
+        /// <param name="userId">The ID of the user being marked as an attendee.</param>
+        /// <param name="addToEvent">A condition stating whether the user is being marked as an attendee or removed from attendance.</param>
+        /// <returns>The service response indicating conditions of the service after completion, as well as containing the result.</returns>
         public async Task<ServiceResponse> UpdateUserEventStatusAsync(int eventId, int userId, bool addToEvent)
         {
             return await ExecAsync(async (db, resp) =>
@@ -147,6 +184,12 @@ namespace Server.LightMediaTechTest.EventManager
             });
         }
 
+        /// <summary>
+        /// Checks to see if a specific user is already attending an event.
+        /// </summary>
+        /// <param name="eventId">The ID of the event being checked.</param>
+        /// <param name="userId">The ID of the user being checked.</param>
+        /// <returns>The service response indicating conditions of the service after completion, as well as containing the result.</returns>
         public async Task<ServiceResponse<bool>> CheckForExistingApplicationAsync(int eventId, int userId)
         {
             return await ExecAsync<bool>(async (db, resp) =>

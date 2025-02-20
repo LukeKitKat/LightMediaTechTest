@@ -5,7 +5,12 @@
     align-items: center;
 }
 
+    .event-page > div {
+        align-items: center;
+    }
+
 .event-description {
+    margin-inline: 5rem;
 }
 
 .event-confirm-attendance {
