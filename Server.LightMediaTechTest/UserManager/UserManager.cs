@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Server.LightMediaTechTest.BaseServices;
-using Server.LightMediaTechTest.DatabaseManager;
 using Server.LightMediaTechTest.DatabaseManager.Models;
 using System;
 using System.Collections.Generic;
@@ -13,20 +11,13 @@ namespace Server.LightMediaTechTest.UserManager
 {
     public class UserManager : ServiceBase
     {
-        private CryptoManager CryptoManager { get; set; } = default!;
-
-        public UserManager(CryptoManager cryptoManager)
-        {
-            CryptoManager = cryptoManager;
-        }
-
         public async Task<ServiceResponse> RegisterNewUserAsync(User user, string password)
         {
             return await ExecAsync(async (db, resp) =>
             {
-                var loginServiceResult = CryptoManager.ProcessHash(password);
+                var loginServiceResult = ProcessHash(password);
 
-                user.DisplayName = user.AccountName;
+                user.DisplayName = user.AccountName ?? string.Empty;
                 user.PasswordHash = loginServiceResult.ProcessedHash;
                 user.PasswordSalt = loginServiceResult.Salt;
 
@@ -43,7 +34,7 @@ namespace Server.LightMediaTechTest.UserManager
 
                 if (user is not null)
                 {
-                    if (CryptoManager.ValidateHash(attemptedPassword, user.PasswordHash, user.PasswordSalt))
+                    if (ValidateHash(attemptedPassword, user.PasswordHash, user.PasswordSalt))
                     {
                         user.LastLoginLocation = Guid.NewGuid().ToString();
                         user.LastLogin = DateTime.UtcNow;
@@ -81,15 +72,6 @@ namespace Server.LightMediaTechTest.UserManager
             return await ExecAsync<List<User>>(async (db, resp) =>
             {
                 return await db.Users.AsNoTracking().ToListAsync();
-            });
-        }
-
-        public async Task<ServiceResponse<UserRole?>> FetchUserRoleByUserIdAsync(int userId)
-        {
-            return await ExecAsync<UserRole?>(async (db, resp) =>
-            {
-                var userRole = (await db.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == userId))?.UserRoleId;
-                return await db.UserRoles.AsNoTracking().FirstAsync(x => x.Id == userRole);
             });
         }
 

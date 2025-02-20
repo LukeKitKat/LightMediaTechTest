@@ -1,5 +1,5 @@
 ﻿html {
-    font-size: 62.5%;
+    font-size: 62.5%; /*Setting base rem size*/
     height: 100%;
 }
 
@@ -10,7 +10,7 @@ body {
 }
 
 p {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
 }
 
 p, h1, h2, h3, h3, h4, h5, h6, i {

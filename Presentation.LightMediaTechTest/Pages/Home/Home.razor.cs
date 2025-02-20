@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Presentation.LightMediaTechTest.Components.MainLayout;
+using Presentation.LightMediaTechTest.Components.PresentationBase;
 using Presentation.LightMediaTechTest.Pages.Login.Models;
-using Presentation.LightMediaTechTest.Pages.Login.Services;
 using Server.LightMediaTechTest.DatabaseManager.Models;
 using Server.LightMediaTechTest.EventManager;
 using Server.LightMediaTechTest.UserManager;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Presentation.LightMediaTechTest.Pages.Home
 {
-    public partial class Home
+    public partial class Home : PresentationPageBase
     {
         [Inject]
         private UserManager UserManager { get; set; } = default!;
@@ -21,8 +21,6 @@ namespace Presentation.LightMediaTechTest.Pages.Home
         private EventManager EventManager { get; set; } = default!;
         [Inject]
         private NavigationManager NavigationManager { get; set; } = default!;
-        [Inject]
-        private CookiesManager CookiesManager { get; set; } = default!;
 
         private MainLayout MainLayout { get; set; } = default!;
 
@@ -30,7 +28,6 @@ namespace Presentation.LightMediaTechTest.Pages.Home
         private List<Event> EventsSource { get; set; } = new List<Event>();
         private List<Event> Events { get; set; } = new List<Event>();
 
-        private User? CurrentUser { get; set; }
         private List<string> Catagories { get; set; } = new();
         private string NameFilter { get; set; } = string.Empty;
         private string CatagoryFilter { get; set; } = string.Empty;
@@ -62,23 +59,6 @@ namespace Presentation.LightMediaTechTest.Pages.Home
             Filter();
         }
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            CurrentUser = null;
-
-            if (int.TryParse(await CookiesManager.GetCookieAsync(LoginConstants.UserCookieId), out int result))
-            {
-                var resp = await UserManager.FetchUserByIdAsync(result);
-                if (!resp.Success)
-                    return;
-
-                CurrentUser = resp.Result;
-                StateHasChanged();
-            }
-
-            await base.OnAfterRenderAsync(firstRender);
-        }
-
         private async Task FetchUsersAsync()
         {
             var resp = await UserManager.FetchAllUsersAsync();
@@ -104,8 +84,13 @@ namespace Presentation.LightMediaTechTest.Pages.Home
                 return;
 
             Catagories.Add("All");
-            foreach(var catagory in resp.Result!)
+            foreach (var catagory in resp.Result!)
+            {
+                if (catagory?.CatagoryName is null)
+                    continue;
+
                 Catagories.Add(catagory.CatagoryName);
+            }
         }
 
         private void Filter()
@@ -116,10 +101,10 @@ namespace Presentation.LightMediaTechTest.Pages.Home
             {
                 Events = EventsSource.Where(x => x.EventName!.Contains(NameFilter, StringComparison.InvariantCultureIgnoreCase)).ToList();
             }
-            
+
             if (CatagoryFilter != "All")
             {
-                Events = Events.Where(x => x.EventCatagory.CatagoryName.Contains(CatagoryFilter, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                Events = Events.Where(x => x.EventCatagory!.CatagoryName!.Contains(CatagoryFilter, StringComparison.InvariantCultureIgnoreCase)).ToList();
             }
         }
     }

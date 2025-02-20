@@ -1,6 +1,4 @@
 using Client.LightMediaTechTest.Components;
-using Presentation.LightMediaTechTest.Pages.Login.Services;
-using Server.LightMediaTechTest.BaseServices;
 using Server.LightMediaTechTest.EventManager;
 using Server.LightMediaTechTest.UserManager;
 
@@ -12,12 +10,9 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddServerSideBlazor();
 builder.Services.AddRazorPages();
-builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddScoped<CryptoManager, CryptoManager>();
 builder.Services.AddScoped<UserManager, UserManager>();
 builder.Services.AddScoped<EventManager, EventManager>();
-builder.Services.AddScoped<CookiesManager, CookiesManager>();
 
 var app = builder.Build();
 

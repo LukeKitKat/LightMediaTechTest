@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Logging;
+using Presentation.LightMediaTechTest.Components.PresentationBase;
 using Presentation.LightMediaTechTest.Pages.Login.Models;
 using Server.LightMediaTechTest.DatabaseManager.Models;
 using Server.LightMediaTechTest.EventManager;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Presentation.LightMediaTechTest.Pages.EventManagementPage
 {
-    public partial class EventManagement
+    public partial class EventManagement : PresentationPageBase
     {
         [Parameter]
         public int EventId { get; set; }
@@ -43,26 +44,24 @@ namespace Presentation.LightMediaTechTest.Pages.EventManagementPage
         {
             EditContext = new(new Event());
 
-            if (Event.Id != 0)
-            {
-                var resp = await EventManager.FetchEventByIdAsync(EventId);
-                if (!resp.Success)
-                    return;
-
-                Event = resp.Result!;
-            }
-            else
-            {
-                Event.EventCatagoryId = EventCatagories.First().Id;
-            }
-
-            EditContext = new(Event);
-
             var catagoriesResp = await EventManager.FetchAllEventCatagoriesAsync();
             if (!catagoriesResp.Success)
                 return;
 
             EventCatagories = catagoriesResp.Result!;
+
+            var resp = await EventManager.FetchEventByIdAsync(EventId);
+            if (!resp.Success)
+                return;
+
+            Event = resp.Result!;
+
+            if (Event.Id == 0)
+            {
+                Event.EventCatagoryId = EventCatagories.First().Id;
+            }
+
+            EditContext = new(Event);
 
             await base.OnInitializedAsync();
         }

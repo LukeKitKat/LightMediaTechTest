@@ -2,6 +2,9 @@
 @using Presentation.LightMediaTechTest.Components.Button
 @using Presentation.LightMediaTechTest.Components.EventComponent
 @using Presentation.LightMediaTechTest.Components.IconButton
+@using Presentation.LightMediaTechTest.Components.PresentationBase
+@page "/"
+@inherits PresentationPageBase
 
 <div class="home">
     <div class="home-container">
@@ -41,7 +44,7 @@
 
         @foreach (var charityEvent in Events)
         {
-            <EventComponent Event="charityEvent" />
+            <EventComponent CurrentUser="CurrentUser" Event="charityEvent" />
         }
 
     </div>

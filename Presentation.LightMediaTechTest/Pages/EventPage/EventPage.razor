@@ -1,10 +1,13 @@
 ﻿@page "/event/{EventId:int}"
+@inherits PresentationPageBase
 @using Microsoft.AspNetCore.Components.Forms
 @using Presentation.LightMediaTechTest.Components.Button
 @using Presentation.LightMediaTechTest.Components.EventComponent
+@using Presentation.LightMediaTechTest.Components.PresentationBase
+@using Server.LightMediaTechTest.DatabaseManager.Models
 
 <div class="event-page">
-    <EventComponent Event="Event" CanBookNow="false" DisplayCreatedDate="false" />
+    <EventComponent CurrentUser="CurrentUser" Event="Event" DisplayCreatedDate="false" DisplayBookRedirect="false" />
 
     <div class="event-description">
         <p>@Event.EventFullDescription</p>
@@ -24,18 +27,19 @@
         }
         else
         {
+            if (CurrentUser is not null)
+            {
+                <h3>Confirm Contact Details to Complete Booking</h3>
+                <br />
 
-            <h3>Confirm Contact Details to Complete Booking</h3>
-            <br />
+                <p>Display Name</p>
+                <InputText @bind-Value="@CurrentUser.DisplayName" />
 
-            <p>Display Name</p>
-            <InputText @bind-Value="@CurrentUser.DisplayName" />
+                <p>Email</p>
+                <InputText @bind-Value="@CurrentUser.Email" />
 
-            <p>Email</p>
-            <InputText DisplayName="Email" @bind-Value="@CurrentUser.Email" />
-
-            <Button Label="Confirm Attendance" OnClick="() => AttendEventClicked(true)" />
-
+                <Button Label="Confirm Attendance" OnClick="() => AttendEventClicked(true)" />
+            }
         }
     </div>
 </div>

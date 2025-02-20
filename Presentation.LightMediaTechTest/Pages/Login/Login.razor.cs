@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Presentation.LightMediaTechTest.Components.PresentationBase;
 using Presentation.LightMediaTechTest.Pages.Login.Models;
-using Presentation.LightMediaTechTest.Pages.Login.Services;
 using Server.LightMediaTechTest.DatabaseManager.Models;
 using Server.LightMediaTechTest.UserManager;
 using System;
@@ -14,24 +14,19 @@ using System.Threading.Tasks;
 
 namespace Presentation.LightMediaTechTest.Pages.Login
 {
-    public partial class Login
+    public partial class Login : PresentationPageBase
     {
         [Inject]
         private UserManager UserManager { get; set; } = default!;
         [Inject]
         private NavigationManager NavigationManager { get; set; } = default!;
-        [Inject]
-        private CookiesManager CookiesManager { get; set; } = default!;
-
-        private bool Registering;
 
         private EditContext? EditContext { get; set; }
-        private ValidationMessageStore? messageStore;
-
         private LoginModel LoginModel = new();
 
-        private List<UserRole> RegisteringRoles = new List<UserRole>();
+        private bool Registering;
         private User RegisteringUser = new();
+        private List<UserRole> RegisteringRoles = new List<UserRole>();
         private string RegisteringPassword = string.Empty;
         private string RegisteringConfirmPassword = string.Empty;
         private string? _registerUserOption;
@@ -86,7 +81,7 @@ namespace Presentation.LightMediaTechTest.Pages.Login
                 if (!userFetchResp.Success)
                     return;
 
-                await CookiesManager.StoreCookieAsync(LoginConstants.UserCookieId, $"{userFetchResp.Result!.Id}");
+                await StoreCookieAsync(LoginConstants.UserCookieId, $"{userFetchResp.Result!.Id}");
                 NavigationManager.NavigateTo("/");
             }
         }

@@ -13,15 +13,15 @@
     height: 20rem;
 }
 
-.event-details {
+.event-column {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-evenly;
     padding-left: 2rem;
 }
 
-    .event-details > p {
-        font-size: 1.4rem;
+    .event-column > p {
+        margin: 0.25rem;
     }
 
 .event-created-date {

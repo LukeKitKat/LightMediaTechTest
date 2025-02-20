@@ -32,7 +32,7 @@ namespace Server.LightMediaTechTest.DatabaseManager.Models
         [Required]
         [ForeignKey(nameof(EventCatagory))]
         public int? EventCatagoryId { get; set; }
-        public virtual EventCatagory EventCatagory {get;set;}
+        public virtual EventCatagory? EventCatagory {get;set;}
 
         [Required]
         public string? EventLocation { get; set; }

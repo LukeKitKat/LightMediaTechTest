@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Server.LightMediaTechTest.BaseServices;
 using Server.LightMediaTechTest.DatabaseManager.Models;
 using System;
 using System.Collections.Generic;
@@ -103,6 +102,8 @@ namespace Server.LightMediaTechTest.EventManager
         {
             return await ExecAsync(async (db, resp) =>
             {
+                @event.PublishedDateTime = DateTime.UtcNow;
+
                 if (updating)
                     db.Events.Update(@event);
                 else

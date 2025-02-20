@@ -7,12 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Server.LightMediaTechTest.DatabaseManager.Models;
 using Presentation.LightMediaTechTest.Pages.Login.Models;
-using Presentation.LightMediaTechTest.Pages.Login.Services;
 using Server.LightMediaTechTest.UserManager;
+using Presentation.LightMediaTechTest.Components.PresentationBase;
 
 namespace Presentation.LightMediaTechTest.Pages.EventPage
 {
-    public partial class EventPage
+    public partial class EventPage : PresentationPageBase
     {
         // Used for routing
         [Parameter]
@@ -22,13 +22,15 @@ namespace Presentation.LightMediaTechTest.Pages.EventPage
         private EventManager EventManager { get; set; } = default!;
         [Inject]
         private UserManager UserManager { get; set; } = default!;
-        [Inject]
-        private CookiesManager CookiesManager { get; set; } = default!;
 
-        private User CurrentUser { get; set; } = new User();
         private Event Event { get; set; } = new Event();
         private bool AlreadyApplied { get; set; }
         private bool RecentlyApplied { get; set; }
+
+        public EventPage()
+        {
+            OnAfterRenderAsyncHandler = CheckForExistingApplicationAsync();
+        }
 
         protected override async Task OnInitializedAsync()
         {
@@ -41,22 +43,11 @@ namespace Presentation.LightMediaTechTest.Pages.EventPage
             await base.OnInitializedAsync();
         }
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            if (int.TryParse(await CookiesManager.GetCookieAsync(LoginConstants.UserCookieId), out int result))
-            {
-                var resp = await UserManager.FetchUserByIdAsync(result);
-                if (resp.Success)
-                    CurrentUser = resp.Result!;
-            }
-
-            await CheckForExistingApplicationAsync();
-            StateHasChanged();
-            await base.OnAfterRenderAsync(firstRender);
-        }
-
         private async Task AttendEventClicked(bool addToEvent)
         {
+            if (CurrentUser is null)
+                return;
+
             var resp = await EventManager.UpdateUserEventStatusAsync(EventId, CurrentUser.Id, addToEvent);
             if (!resp.Success)
                 return;
@@ -73,6 +64,9 @@ namespace Presentation.LightMediaTechTest.Pages.EventPage
 
         private async Task CheckForExistingApplicationAsync()
         {
+            if (CurrentUser is null)
+                return;
+
             var resp = await EventManager.CheckForExistingApplicationAsync(EventId, CurrentUser.Id);
             if (resp.Success)
                 AlreadyApplied = resp.Result;
