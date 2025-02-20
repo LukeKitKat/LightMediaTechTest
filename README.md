@@ -15,6 +15,8 @@ Hi There!
 
 I hope the code provided meets your standards for a developmental structure and code legibility. I apologise that this task took me longer than originally expected. I had to create a code-first database design purely from imagination and so spent a lot of time wrestling with EntityFramework to get things working.
 
+If you're wondering why there are GitHub files included in this, I hosted this code on a private GitHub repository for the sake of my development process so I could have access to source control in case I needed to go back to a previous version.
+
 Listed below will be what is utilised within the project to complete the required specifications:
 
 **Front-End:**
