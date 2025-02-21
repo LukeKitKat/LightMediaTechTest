@@ -1,11 +1,15 @@
-﻿using Server.LightMediaTechTest.DatabaseManager;
+﻿using Microsoft.Extensions.Configuration;
+using Server.LightMediaTechTest.DatabaseContext;
+using Server.LightMediaTechTest.Models;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace Server.LightMediaTechTest
 {
-    public class ServiceBase
+    public class ServiceBase(AppSettings appSettings)
     {
+        private readonly AppSettings _appSettings = appSettings;
+
         /// <summary>
         /// A handler which constructs a service response which handles the result of a desired type within a given Task, as well as any errors.
         /// </summary>
@@ -14,27 +18,32 @@ namespace Server.LightMediaTechTest
         /// <returns>The a service response containing the result and details of the given Task.</returns>
         internal async Task<ServiceResponse<T>> ExecAsync<T>(Func<MyContext, ServiceResponse<T>, Task<T?>> method)
         {
-            MyContext context = new MyContext();
-            ServiceResponse<T> serviceResponse = new ServiceResponse<T>();
+            ServiceResponse<T> serviceResponse = new();
+            MyContext? context = await new MyContext(_appSettings).InitializeAsync();
 
-            try
+            if (context is null)
             {
-                var invoke = method.DynamicInvoke(context, serviceResponse) as Task<T?>;
-
-                if (invoke is null)
+                serviceResponse.Errors.Add("Database could not initialize");
+            }
+            else
+            {
+                try
                 {
-                    serviceResponse.Success = false;
-                    return serviceResponse;
+                    if (method.DynamicInvoke(context, serviceResponse) is not Task<T?> invoke)
+                    {
+                        serviceResponse.Success = false;
+                        return serviceResponse;
+                    }
+
+                    serviceResponse.Result = await invoke;
                 }
-
-                serviceResponse.Result = await invoke;
-            }
-            catch (Exception ex)
-            {
-                serviceResponse.Errors.Add($"{ex.Message} - {ex.InnerException?.Message}" ?? "No Message Specified.");
+                catch (Exception ex)
+                {
+                    serviceResponse.Errors.Add($"{ex.Message} - {ex.InnerException?.Message}" ?? "No Message Specified.");
+                }
             }
 
-            if (!serviceResponse.Errors.Any())
+            if (serviceResponse.Errors.Count == 0)
                 serviceResponse.Success = true;
 
             return serviceResponse;
@@ -47,27 +56,32 @@ namespace Server.LightMediaTechTest
         /// <returns>The a service response containing the details of the given Task.</returns>
         internal async Task<ServiceResponse> ExecAsync(Func<MyContext, ServiceResponse, Task> method)
         {
-            MyContext context = new MyContext();
-            ServiceResponse serviceResponse = new ServiceResponse();
+            ServiceResponse serviceResponse = new();
+            MyContext? context = await new MyContext(_appSettings).InitializeAsync();
 
-            try
+            if (context is null)
             {
-                var invoke = method.DynamicInvoke(context, serviceResponse) as Task;
-
-                if (invoke is null)
+                serviceResponse.Errors.Add("Database could not initialize");
+            }
+            else
+            {
+                try
                 {
-                    serviceResponse.Success = false;
-                    return serviceResponse;
+                    if (method.DynamicInvoke(context, serviceResponse) is not Task invoke)
+                    {
+                        serviceResponse.Success = false;
+                        return serviceResponse;
+                    }
+
+                    await invoke;
                 }
-
-                await invoke;
-            }
-            catch (Exception ex)
-            {
-                serviceResponse.Errors.Add($"{ex.Message} - {ex.InnerException?.Message}" ?? "No Message Specified.");
+                catch (Exception ex)
+                {
+                    serviceResponse.Errors.Add($"{ex.Message} - {ex.InnerException?.Message}" ?? "No Message Specified.");
+                }
             }
 
-            if (!serviceResponse.Errors.Any())
+            if (serviceResponse.Errors.Count == 0)
                 serviceResponse.Success = true;
 
             return serviceResponse;
@@ -81,14 +95,10 @@ namespace Server.LightMediaTechTest
         /// <returns>The processed hash and the salt in case a salt was generated for the data.</returns>
         internal (string ProcessedHash, string Salt) ProcessHash(string data, string? salt = null)
         {
-            using (SHA512 sha512 = SHA512.Create())
-            {
-                salt = salt ?? Guid.NewGuid().ToString();
-                byte[] combinedHash = Encoding.ASCII.GetBytes(salt + data);
+            salt ??= Guid.NewGuid().ToString();
+            byte[] combinedHash = Encoding.ASCII.GetBytes(salt + data);
 
-                return new(Encoding.ASCII.GetString(sha512.ComputeHash(combinedHash)), salt);
-
-            }
+            return new(Encoding.ASCII.GetString(SHA512.HashData(combinedHash)), salt);
         }
 
         /// <summary>
@@ -100,9 +110,7 @@ namespace Server.LightMediaTechTest
         /// <returns>A condition stating whether the data is valid and matches the stored hash, or not.</returns>
         internal bool ValidateHash(string data, string storedHash, string storedSalt)
         {
-            var result = ProcessHash(data, storedSalt);
-
-            if (result.ProcessedHash == storedHash)
+            if (ProcessHash(data, storedSalt).ProcessedHash == storedHash)
                 return true;
             else
                 return false;
@@ -110,13 +118,3 @@ namespace Server.LightMediaTechTest
     }
 }
 
-public class ServiceResponse<T>() : ServiceResponse
-{
-    public T? Result { get; set; }
-}
-
-public class ServiceResponse()
-{
-    public bool Success { get; set; } = false;
-    public List<string> Errors { get; set; } = new List<string>();
-}

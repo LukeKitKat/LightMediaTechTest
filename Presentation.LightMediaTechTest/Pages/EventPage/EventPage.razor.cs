@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Server.LightMediaTechTest.EventManager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Server.LightMediaTechTest.DatabaseManager.Models;
 using Presentation.LightMediaTechTest.Pages.Login.Models;
-using Server.LightMediaTechTest.UserManager;
-using Presentation.LightMediaTechTest.Components.PresentationBase;
+using Presentation.LightMediaTechTest.Components.PresentationPageBase;
+using Server.LightMediaTechTest.Services.UserManager;
+using Server.LightMediaTechTest.Services.EventManager;
+using Server.LightMediaTechTest.DatabaseContext.Models;
 
 namespace Presentation.LightMediaTechTest.Pages.EventPage
 {
@@ -23,7 +18,7 @@ namespace Presentation.LightMediaTechTest.Pages.EventPage
         [Inject]
         private UserManager UserManager { get; set; } = default!;
 
-        private Event Event { get; set; } = new Event();
+        private Event Event { get; set; } = new();
         private bool AlreadyApplied { get; set; }
         private bool RecentlyApplied { get; set; }
 

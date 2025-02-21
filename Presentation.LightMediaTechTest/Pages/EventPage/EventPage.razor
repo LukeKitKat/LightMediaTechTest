@@ -1,10 +1,11 @@
 ﻿@page "/event/{EventId:int}"
 @inherits PresentationPageBase
+
 @using Microsoft.AspNetCore.Components.Forms
 @using Presentation.LightMediaTechTest.Components.Button
 @using Presentation.LightMediaTechTest.Components.EventComponent
-@using Presentation.LightMediaTechTest.Components.PresentationBase
-@using Server.LightMediaTechTest.DatabaseManager.Models
+@using Presentation.LightMediaTechTest.Components.PresentationPageBase
+@using Server.LightMediaTechTest.DatabaseContext.Models
 
 <div class="event-page">
     <EventComponent CurrentUser="CurrentUser" Event="Event" DisplayCreatedDate="false" DisplayBookRedirect="false" />

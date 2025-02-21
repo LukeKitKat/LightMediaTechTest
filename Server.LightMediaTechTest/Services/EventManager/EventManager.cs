@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Server.LightMediaTechTest.DatabaseManager.Models;
+using Server.LightMediaTechTest.DatabaseContext.Models;
+using Server.LightMediaTechTest.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +9,12 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.LightMediaTechTest.EventManager
+namespace Server.LightMediaTechTest.Services.EventManager
 {
-    public class EventManager : ServiceBase
+    public class EventManager(AppSettings appSettings)
+        : ServiceBase(appSettings)
     {
+
         /// <summary>
         /// A basic task just to generate three example events for the sake of this Test.
         /// </summary>
@@ -25,40 +28,40 @@ namespace Server.LightMediaTechTest.EventManager
 
                 await db.Events.AddRangeAsync(new List<Event>()
                 {
-                    new Event()
+                    new()
                     {
                         EventName = "5k Fun-Run",
                         EventShortDescription = "Lorum Ipsum",
                         EventFullDescription = "Lorem ipsum dolor sit amet. Ut repellat reiciendis qui culpa deserunt ad debitis sequi. Id similique exercitationem ut similique recusandae et odit mollitia et necessitatibus deleniti quo asperiores consectetur.",
                         EventCatagoryId = funRunId,
                         EventLocation="10 Coder Avenue, England",
-                        EventDateTime = DateTime.Now.AddDays(3),
+                        EventDateTime = DateTime.Parse(DateTime.Now.AddDays(3).ToShortDateString()),
                         PublishedDateTime = DateTime.UtcNow,
                         EventPicture = "Placeholder.png",
                         AcceptingBookings = true,
                     },
 
-                    new Event()
+                    new()
                     {
                         EventName = "10k Fun-Run",
                         EventShortDescription = "Lorum Ipsum",
                         EventFullDescription = "Lorem ipsum dolor sit amet. Ut repellat reiciendis qui culpa deserunt ad debitis sequi. Id similique exercitationem ut similique recusandae et odit mollitia et necessitatibus deleniti quo asperiores consectetur.",
                         EventCatagoryId = funRunId,
                         EventLocation="23 Silicon Way, Wales",
-                        EventDateTime = DateTime.Now.AddDays(5),
+                        EventDateTime = DateTime.Parse(DateTime.Now.AddDays(5).ToShortDateString()),
                         PublishedDateTime = DateTime.UtcNow,
                         EventPicture = "Placeholder.png",
                         AcceptingBookings = true,
                     },
 
-                    new Event()
+                    new()
                     {
                         EventName = "Bake-Off",
                         EventShortDescription = "Lorum Ipsum",
                         EventFullDescription = "Lorem ipsum dolor sit amet. Ut repellat reiciendis qui culpa deserunt ad debitis sequi. Id similique exercitationem ut similique recusandae et odit mollitia et necessitatibus deleniti quo asperiores consectetur.",
                         EventCatagoryId = bakeOffId,
                         EventLocation="2 Ascii Close, England",
-                        EventDateTime = DateTime.Now.AddDays(7),
+                        EventDateTime = DateTime.Parse(DateTime.Now.AddDays(7).ToShortDateString()),
                         PublishedDateTime = DateTime.UtcNow,
                         EventPicture = "Placeholder.png",
                         AcceptingBookings = true,
@@ -133,7 +136,7 @@ namespace Server.LightMediaTechTest.EventManager
                     @event.PublishedDateTime = DateTime.UtcNow;
                     await db.Events.AddAsync(@event);
                 }
-                
+
                 await db.SaveChangesAsync();
             });
         }
@@ -176,9 +179,9 @@ namespace Server.LightMediaTechTest.EventManager
                 }
 
                 if (addToEvent)
-                    await db.EventAttendees.AddAsync(new() { UserId = userId, EventId = eventId });
+                    await db.EventUsers.AddAsync(new() { UserId = userId, EventId = eventId });
                 else
-                    db.EventAttendees.Remove(db.EventAttendees.First(x => x.UserId == userId && x.EventId == eventId));
+                    db.EventUsers.Remove(db.EventUsers.First(x => x.UserId == userId && x.EventId == eventId));
 
                 await db.SaveChangesAsync();
             });

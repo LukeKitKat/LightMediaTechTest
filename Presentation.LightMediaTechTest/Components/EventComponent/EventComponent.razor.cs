@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Presentation.LightMediaTechTest.Pages.Login.Models;
-using Server.LightMediaTechTest.DatabaseManager.Models;
-using Server.LightMediaTechTest.UserManager;
+using Server.LightMediaTechTest.DatabaseContext.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

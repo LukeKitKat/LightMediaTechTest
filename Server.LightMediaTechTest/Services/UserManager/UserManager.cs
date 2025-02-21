@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Server.LightMediaTechTest.DatabaseManager.Models;
+using Server.LightMediaTechTest.DatabaseContext.Models;
+using Server.LightMediaTechTest.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -7,10 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.LightMediaTechTest.UserManager
+namespace Server.LightMediaTechTest.Services.UserManager
 {
-    public class UserManager : ServiceBase
+    public class UserManager(AppSettings appSettings)
+        : ServiceBase(appSettings)
     {
+
         /// <summary>
         /// Generates an example user for this Test.
         /// </summary>
@@ -48,11 +51,11 @@ namespace Server.LightMediaTechTest.UserManager
         {
             return await ExecAsync(async (db, resp) =>
             {
-                var loginServiceResult = ProcessHash(password);
+                var (ProcessedHash, Salt) = ProcessHash(password);
 
                 user.DisplayName = user.AccountName ?? string.Empty;
-                user.PasswordHash = loginServiceResult.ProcessedHash;
-                user.PasswordSalt = loginServiceResult.Salt;
+                user.PasswordHash = ProcessedHash;
+                user.PasswordSalt = Salt;
 
                 await db.AddAsync(user);
                 await db.SaveChangesAsync();

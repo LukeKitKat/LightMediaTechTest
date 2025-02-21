@@ -1,8 +1,9 @@
 @page "/eventmanager/{EventId:int}"
 @inherits PresentationPageBase
+
 @using Microsoft.AspNetCore.Components.Forms
 @using Presentation.LightMediaTechTest.Components.Button
-@using Presentation.LightMediaTechTest.Components.PresentationBase
+@using Presentation.LightMediaTechTest.Components.PresentationPageBase
 
 <div class="event-manager">
     <div class="event-manager-details">
@@ -47,14 +48,14 @@
 
                 <Button ButtonType="ButtonTypes.Submit" Label="Confirm Changes" />
 
-                @if ((Event?.Id ?? 0) is not 0)
+                @if ((Event?.Id ?? 0) != 0)
                 {
                     <Button Label="DELETE EVENT" OnClick="DeleteEventClicked" />
                 }
             </EditForm>
         }
 
-        @if (CurrentUser?.UserRoles?.CanManageUsers ?? false)
+        @if ((CurrentUser?.UserRoles?.CanManageUsers ?? false) && ((Event?.Id ?? 0) != 0))
         {
             <div class="event-manager-attendees">
                 <h3>Event Attendees</h3>

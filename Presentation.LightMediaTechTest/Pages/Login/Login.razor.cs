@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Presentation.LightMediaTechTest.Components.PresentationBase;
+using Presentation.LightMediaTechTest.Components.PresentationPageBase;
 using Presentation.LightMediaTechTest.Pages.Login.Models;
-using Server.LightMediaTechTest.DatabaseManager.Models;
-using Server.LightMediaTechTest.UserManager;
+using Server.LightMediaTechTest.DatabaseContext.Models;
+using Server.LightMediaTechTest.Services.UserManager;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -26,7 +26,7 @@ namespace Presentation.LightMediaTechTest.Pages.Login
 
         private bool Registering;
         private User RegisteringUser = new();
-        private List<UserRole> RegisteringRoles = new List<UserRole>();
+        private List<UserRole> RegisteringRoles = [];
         private string RegisteringPassword = string.Empty;
         private string RegisteringConfirmPassword = string.Empty;
         private string? _registerUserOption;

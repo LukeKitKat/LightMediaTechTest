@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Presentation.LightMediaTechTest.Components.MainLayout;
-using Presentation.LightMediaTechTest.Components.PresentationBase;
+using Presentation.LightMediaTechTest.Components.PresentationPageBase;
 using Presentation.LightMediaTechTest.Pages.Login.Models;
-using Server.LightMediaTechTest.DatabaseManager.Models;
-using Server.LightMediaTechTest.EventManager;
-using Server.LightMediaTechTest.UserManager;
+using Server.LightMediaTechTest.DatabaseContext.Models;
+using Server.LightMediaTechTest.Services.EventManager;
+using Server.LightMediaTechTest.Services.UserManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +22,11 @@ namespace Presentation.LightMediaTechTest.Pages.Home
         [Inject]
         private NavigationManager NavigationManager { get; set; } = default!;
 
-        private MainLayout MainLayout { get; set; } = default!;
+        private List<User> Users { get; set; } = [];
+        private List<Event> EventsSource { get; set; } = [];
+        private List<Event> Events { get; set; } = [];
 
-        private List<User> Users { get; set; } = new List<User>();
-        private List<Event> EventsSource { get; set; } = new List<Event>();
-        private List<Event> Events { get; set; } = new List<Event>();
-
-        private List<string> Catagories { get; set; } = new();
+        private List<string> Catagories { get; set; } = [];
         private string NameFilter { get; set; } = string.Empty;
         private string CatagoryFilter { get; set; } = string.Empty;
 
@@ -39,7 +37,7 @@ namespace Presentation.LightMediaTechTest.Pages.Home
             await FetchEventsAsync();
             await FetchCatagoriesAsync();
 
-            if (!Users.Any())
+            if (Users.Count == 0)
             {
                 var resp = await UserManager.GenerateExampleUserAsync();
                 if (!resp.Success)
@@ -48,7 +46,7 @@ namespace Presentation.LightMediaTechTest.Pages.Home
                 await FetchUsersAsync();
             }
 
-            if (!EventsSource.Any())
+            if (EventsSource.Count == 0)
             {
                 var resp = await EventManager.GenerateTemplateEventsAsync();
                 if (!resp.Success)

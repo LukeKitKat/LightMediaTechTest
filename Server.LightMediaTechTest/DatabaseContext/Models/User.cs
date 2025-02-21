@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.LightMediaTechTest.DatabaseManager.Models
+namespace Server.LightMediaTechTest.DatabaseContext.Models
 {
     [Table("Users")]
     [Index(nameof(Id), Name = "IX_Users_Id", IsUnique = true)]
@@ -52,7 +52,7 @@ namespace Server.LightMediaTechTest.DatabaseManager.Models
         public string? LastLoginLocation { get; set; } = string.Empty;
 
 
-        public virtual ICollection<EventUser> EventUsers { get; set; } = new HashSet<EventUser>();
+        public virtual ICollection<EventUser> EventUsers { get; set; } = [];
 
         #endregion
     }

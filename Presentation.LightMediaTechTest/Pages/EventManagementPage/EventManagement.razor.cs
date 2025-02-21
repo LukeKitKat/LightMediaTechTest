@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
-using Presentation.LightMediaTechTest.Components.PresentationBase;
+using Presentation.LightMediaTechTest.Components.PresentationPageBase;
 using Presentation.LightMediaTechTest.Pages.Login.Models;
-using Server.LightMediaTechTest.DatabaseManager.Models;
-using Server.LightMediaTechTest.EventManager;
+using Server.LightMediaTechTest.DatabaseContext.Models;
+using Server.LightMediaTechTest.Services.EventManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;

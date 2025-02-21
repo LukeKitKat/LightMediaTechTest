@@ -7,7 +7,9 @@
 
 **Date Submitted:** 24/02/2025
 
-**Additional Instructions:** PLEASE RUN THE APPLICATION ON CHROME IF POSSIBLE. THIS IS THE BROWSER I WORKED WITH AND IS ONE I CAN GUARANTEE SHOULD WORK.
+**Additional Instructions:**
+* The application can be run by opening the project Solution within Visual Studio and using the Build and Run button at the top of the page.
+* Before running, please ensure the Build and Run button at the top of the page has 'https' selected. For best results please also ensure the 'Web Browser' setting is set to Google Chrome. This is the browser I worked with whilst developing the application and is likely will work the best.
 
 ---
 

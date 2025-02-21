@@ -1,6 +1,7 @@
 using Client.LightMediaTechTest.Components;
-using Server.LightMediaTechTest.EventManager;
-using Server.LightMediaTechTest.UserManager;
+using Server.LightMediaTechTest.Models;
+using Server.LightMediaTechTest.Services.EventManager;
+using Server.LightMediaTechTest.Services.UserManager;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,12 +11,16 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddServerSideBlazor();
 builder.Services.AddRazorPages();
+builder.Services.AddLogging();
 
 builder.Services.AddScoped<UserManager, UserManager>();
 builder.Services.AddScoped<EventManager, EventManager>();
+builder.Services.AddSingleton<AppSettings, AppSettings>();
+
+builder.Logging.AddConfiguration(
+    builder.Configuration.GetSection("Logging"));
 
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -2,15 +2,15 @@
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.JSInterop;
 using Presentation.LightMediaTechTest.Pages.Login.Models;
-using Server.LightMediaTechTest.DatabaseManager.Models;
-using Server.LightMediaTechTest.UserManager;
+using Server.LightMediaTechTest.DatabaseContext.Models;
+using Server.LightMediaTechTest.Services.UserManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Presentation.LightMediaTechTest.Components.PresentationBase
+namespace Presentation.LightMediaTechTest.Components.PresentationPageBase
 {
     public partial class PresentationPageBase : LayoutComponentBase
     {
@@ -20,7 +20,7 @@ namespace Presentation.LightMediaTechTest.Components.PresentationBase
         UserManager UserManager { get; set; } = default!;
 
         public User? CurrentUser { get; set; }
-        private protected string _keyUUID { get => "lightmediacookie"; }
+        private protected static string KeyUUID { get => "lightmediacookie"; }
 
         public delegate Task OnAfterRenderAsyncOverload(object sender, EventArgs args);
         public event OnAfterRenderAsyncOverload? OnAfterRenderAsyncOverloadEvent;
@@ -63,10 +63,8 @@ namespace Presentation.LightMediaTechTest.Components.PresentationBase
 
             using (var fileStream = File.OpenRead(filePath))
             {
-                using (var streamRef = new DotNetStreamReference(fileStream))
-                {
-                    await JSRuntime.InvokeVoidAsync("DownloadFileFromStreamAsync", fileName, streamRef);
-                }
+                using var streamRef = new DotNetStreamReference(fileStream);
+                await JSRuntime.InvokeVoidAsync("DownloadFileFromStreamAsync", fileName, streamRef);
             }
 
             File.Delete(filePath);
@@ -88,7 +86,7 @@ namespace Presentation.LightMediaTechTest.Components.PresentationBase
         /// <param name="value">The value of the data.</param>
         /// <returns>The completed task.</returns>
         public async Task StoreCookieAsync(string key, string value) =>
-            await JSRuntime.InvokeVoidAsync("SetCookie", $"{_keyUUID}-{key}", value);
+            await JSRuntime.InvokeVoidAsync("SetCookie", $"{KeyUUID}-{key}", value);
 
         /// <summary>
         /// A helper method designed only to be used by the two public facing classes and assist in parsing the data fetched from a session.
@@ -97,11 +95,11 @@ namespace Presentation.LightMediaTechTest.Components.PresentationBase
         /// <param name="key">The key identifying the data.</param>
         /// <param name="cookie">The value of the full cookie.</param>
         /// <returns></returns>
-        private T ParseCookies<T>(string key, string cookie)
+        private static T ParseCookies<T>(string key, string cookie)
         {
             try
             {
-                return (T)Convert.ChangeType(cookie.Replace($"{_keyUUID}-{key}=", ""), typeof(T));
+                return (T)Convert.ChangeType(cookie.Replace($"{KeyUUID}-{key}=", ""), typeof(T));
             }
             catch
             {

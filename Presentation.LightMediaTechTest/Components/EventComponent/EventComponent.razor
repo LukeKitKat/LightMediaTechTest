@@ -16,7 +16,7 @@
             <p>@($"Event summary: {Event.EventShortDescription}")</p>
             <p>@($"Event type: {Event.EventCatagory?.CatagoryName}")</p>
             <p>@($"Event location: {Event.EventLocation}")</p>
-            <p>@($"Event date: {Event.EventDateTime}")</p>
+            <p>@($"Event date: {Event.EventDateTime?.ToShortDateString()}")</p>
 
             @if (DisplayBookRedirect)
             {

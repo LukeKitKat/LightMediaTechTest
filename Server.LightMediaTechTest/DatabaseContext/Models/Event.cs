@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.LightMediaTechTest.DatabaseManager.Models
+namespace Server.LightMediaTechTest.DatabaseContext.Models
 {
     [Table("Events")]
     [Index(nameof(Id), Name = "IX_Events_Id", IsUnique = true)]
