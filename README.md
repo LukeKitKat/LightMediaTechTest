@@ -9,6 +9,7 @@
 
 **Additional Instructions:**
 * The application can be run by opening the project Solution within Visual Studio and using the Build and Run button at the top of the page:
+
 ![image](https://github.com/user-attachments/assets/60166491-f19c-45a0-a5ed-320e31cb7c34)
 * Before running, please ensure the Build and Run button at the top of the page has `https` selected. For best results please also ensure the `Web Browser` setting is set to `Google Chrome`. This is the browser I worked with whilst developing the application and is likely will work the best.
 * The database is designed to be code-first. This means there are no necessary T-SQL or generation scripts required as the database itself, it's tables and any seeded data will be automatically generated upon running the program for the first time.
